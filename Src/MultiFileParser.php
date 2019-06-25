@@ -79,6 +79,7 @@ class MultiFileParser implements MultiFileParserInterface
 
     /**
      * @return string
+     * @throws \Exception
      */
     public function write(): string
     {
@@ -94,10 +95,11 @@ class MultiFileParser implements MultiFileParserInterface
             ++$count;
         }
         $file_name = md5(time()) . $this->ext;
-        $file_dir_path = realpath(
-            dirname(__DIR__)
-            . "/$this->output_dir/"
-        );
+        $file_dir_path = dirname(__DIR__) . "/$this->output_dir/";
+        if (! file_exists($file_dir_path) && ! mkdir($file_dir_path)) {
+            throw new \Exception('cannot create directory for save result');
+        }
+
         return file_put_contents($file_dir_path . '/' . $file_name, $prepared_csv_data)
             ? $file_name
             : '';
