@@ -8,11 +8,40 @@ class MultiFileParser implements MultiFileParserInterface
     protected $parsed_data = [];
     protected $delimiter = ',';
     protected $enclosure = '"';
+    /**
+     * Название дирректории для выходных данных
+     * @var string
+     */
     protected $output_dir = 'result';
+
+    /**
+     * Расширение файлов
+     * @var string
+     */
     protected $ext = '.csv';
+
+    /**
+     * Максимальное количество объектов с уникальным id
+     * @var int|mixed
+     */
     protected $count_same_id_constraint = 2;
+
+    /**
+     * Максимальное количество строк в результирующем файле
+     * @var int|mixed
+     */
     protected $max_count_constraint = 3;
+
+    /**
+     * Индекс колонки, по которой производится сортировка
+     * @var int|mixed
+     */
     protected $sort_column = 2;
+
+    /**
+     * Колонка по которой делается ограничение на уникальность
+     * @var int|mixed
+     */
     protected $id_column = 0;
 
     /**
@@ -45,6 +74,8 @@ class MultiFileParser implements MultiFileParserInterface
     }
 
     /**
+     * Возвращает распарсенные и отсортированные данные
+     *
      * @return array
      */
     public function getParsedData(): array
@@ -53,6 +84,8 @@ class MultiFileParser implements MultiFileParserInterface
     }
 
     /**
+     * Сортирует данные
+     *
      * @return array
      */
     private function getSortedData(): array
@@ -62,6 +95,8 @@ class MultiFileParser implements MultiFileParserInterface
     }
 
     /**
+     * Функция сортировки данных по индексу
+     *
      * @param $key
      * @param string $order
      * @return \Closure
@@ -78,6 +113,8 @@ class MultiFileParser implements MultiFileParserInterface
     }
 
     /**
+     * Фильтрация по ограничениям и запись данных в csv
+     *
      * @return string
      * @throws \Exception
      */
@@ -106,14 +143,21 @@ class MultiFileParser implements MultiFileParserInterface
     }
 
     /**
+     * Проверяет ограничения на повторы объектов столбца id_column
+     *
      * @param array $same_id_constraint_data
      * @param array $row
      * @return bool
      */
-    private function checkSameIdConstraint(array &$same_id_constraint_data, array $row): bool
-    {
+    private function checkSameIdConstraint(
+        array &$same_id_constraint_data,
+        array $row
+    ): bool {
         $key_exist = array_key_exists($row[$this->id_column], $same_id_constraint_data);
-        if ($key_exist && $same_id_constraint_data[$this->id_column] >= $this->count_same_id_constraint) return false;
+        if (
+            $key_exist
+            && $same_id_constraint_data[$this->id_column] >= $this->count_same_id_constraint
+        ) return false;
         if (! $key_exist) {
             $same_id_constraint_data[$this->id_column] = 0;
         }
@@ -122,6 +166,8 @@ class MultiFileParser implements MultiFileParserInterface
     }
 
     /**
+     * Конвертирует массив в csv стоку нужного формата
+     *
      * @param array $input
      * @return string
      */

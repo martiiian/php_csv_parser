@@ -30,6 +30,8 @@ class Parser implements ParserInterface
     }
 
     /**
+     * Запускает процесс парсинга
+     *
      * @return array
      */
     function parse(): array
@@ -40,6 +42,8 @@ class Parser implements ParserInterface
 
 
     /**
+     * Конвертирует csv в массив
+     *
      * @param $resource
      * @param int $file_size
      * @return array
@@ -53,17 +57,20 @@ class Parser implements ParserInterface
             $file_size,
             $this->delimiter
         )) {
-            $data[] = $this->parseRowWithFormat($row, 'classic');
+            $data[] = $this->formatParsedRow($row, 'classic');
         }
         return $data;
     }
 
     /**
+     * Форматирует распарсеную строчку
+     * в соответствии с указанным форматом
+     *
      * @param array $row
      * @param string $format_name
      * @return array
      */
-    private function parseRowWithFormat(array $row, string $format_name): array
+    private function formatParsedRow(array $row, string $format_name): array
     {
         switch ($format_name) {
             case 'classic':
@@ -73,13 +80,16 @@ class Parser implements ParserInterface
                     (int) $row[2]
                 ];
                 break;
+            // add other formats...
             default:
                 [];
         }
     }
 
     /**
-     * @return bool|array
+     * Считывает CSV файл возращая размер и ресурс файла
+     *
+     * @return array
      */
     public function uploadCsvFile()
     {
