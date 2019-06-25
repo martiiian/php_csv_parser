@@ -5,7 +5,7 @@ namespace Src;
 class Parser implements ParserInterface
 {
     private $filename = '';
-    private $path_to_csv_dir = 'data';
+    private $csv_src_dir_name = 'data';
     private $ext = '.csv';
     private $delimiter = ',';
 
@@ -13,20 +13,16 @@ class Parser implements ParserInterface
      * Parser constructor.
      *
      * @param string $filename
-     * @param string $delimiter
-     * @param string $ext
-     * @param string $path_to_csv_dir
+     * @param array $options
      */
     public function __construct(
         string $filename,
-        string $delimiter = ',',
-        string $ext = '.csv',
-        string $path_to_csv_dir = 'data'
+        array $options = []
     ) {
         $this->filename = $filename;
-        $this->delimiter = $delimiter;
-        $this->ext = $ext;
-        $this->path_to_csv_dir = $path_to_csv_dir;
+        $this->delimiter = $options['delimiter'] ?? $this->delimiter;
+        $this->ext = $options['ext'] ?? $this->ext;
+        $this->csv_src_dir_name = $options['csv_src_dir_name'] ?? $this->csv_src_dir_name;
     }
 
     /**
@@ -98,7 +94,7 @@ class Parser implements ParserInterface
 
             $file_path = realpath(
                 dirname(__DIR__)
-                . "/$this->path_to_csv_dir/"
+                . "/$this->csv_src_dir_name/"
                 . $this->filename
                 . $this->ext
             );

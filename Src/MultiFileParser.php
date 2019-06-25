@@ -4,10 +4,27 @@ namespace Src;
 
 class MultiFileParser implements MultiFileParserInterface
 {
-    protected $file_names = [];
+    /**
+     * массив с информацией о исходных CSV файлах
+     * @var array|mixed
+     */
+    protected $src_files = [];
+
+    /**
+     * Распарсенные и совмещенные данные
+     * @var array
+     */
     protected $parsed_data = [];
-    protected $delimiter = ',';
+
+    /**
+     *
+     * @var string
+     */
+    protected $out_delimiter = ',';
+
+
     protected $enclosure = '"';
+
     /**
      * Название дирректории для выходных данных
      * @var string
@@ -15,7 +32,7 @@ class MultiFileParser implements MultiFileParserInterface
     protected $output_dir = 'result';
 
     /**
-     * Расширение файлов
+     * Расширение выходного файла
      * @var string
      */
     protected $ext = '.csv';
@@ -51,8 +68,8 @@ class MultiFileParser implements MultiFileParserInterface
      */
     public function __construct(array $data)
     {
-        $this->file_names = $data['file_names'];
-        if (count($data['file_names']) === 0) {
+        $this->src_files = $data['src_files'];
+        if (count($data['src_files']) === 0) {
             throw new \Exception('file names is empty!');
         }
         $this->count_same_id_constraint = $data['count_same_id_constraint'] ?? $this->count_same_id_constraint;
@@ -66,8 +83,11 @@ class MultiFileParser implements MultiFileParserInterface
      */
     public function parse(): MultiFileParserInterface
     {
-        foreach($this->file_names as $file_name) {
-            $parser = new Parser($file_name, $this->delimiter, $this->ext);
+        foreach($this->src_files as $src_file) {
+            $parser = new Parser($src_file['name'], [
+                'delimiter' => $src_file['delimiter'],
+                'ext' => $src_file['ext']
+            ]);
             $this->parsed_data = array_merge($this->parsed_data, $parser->parse());
         }
         return $this;
@@ -174,7 +194,7 @@ class MultiFileParser implements MultiFileParserInterface
     private function convertArrayToString(array $input): string
     {
         $fp = fopen('php://temp', 'r+');
-        fputcsv($fp, $input, $this->delimiter, $this->enclosure);
+        fputcsv($fp, $input, $this->out_delimiter, $this->enclosure);
         rewind($fp);
         $string = stream_get_contents($fp);
         fclose($fp);

@@ -5,9 +5,13 @@ use \Src\Parser;
 
 final class ParserTest extends TestCase
 {
+    protected $csv_dir_name = 'Tests/data';
+
     public function test_init_parser_file1()
     {
-        $parser = new Parser('file1');
+        $parser = new Parser('file1', [
+            'csv_src_dir_name' => $this->csv_dir_name
+        ]);
         $this->assertInstanceOf('\Src\ParserInterface', $parser);
         $result = $parser->parse();
         $this->assertIsArray($result);
@@ -17,16 +21,12 @@ final class ParserTest extends TestCase
         }
     }
 
-    public function test_init_parser_file2()
-    {
-        $parser = new Parser('file1');
-        $this->assertInstanceOf('\Src\Parser', $parser);
-    }
-
 
     public function test_convert_csv_to_array()
     {
-        $parser = new Parser('file1');
+        $parser = new Parser('file1', [
+            'csv_src_dir_name' => $this->csv_dir_name
+        ]);
         list($resource, $file_size) = $parser->uploadCsvFile();
         $parsed = $parser->convertCsvToArray($resource, $file_size);
         $this->assertIsArray($parsed);

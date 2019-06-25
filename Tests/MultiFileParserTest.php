@@ -5,14 +5,30 @@ use \Src\Parser;
 
 final class MultiFileParserTest extends TestCase
 {
+    public function getFiles()
+    {
+        return [
+            [
+                'name' => 'file1',
+                'ext' => '.csv',
+                'delimiter' => ','
+            ],
+            [
+                'name' => 'file2',
+                'ext' => '.csv',
+                'delimiter' => ','
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     * @throws Exception
+     */
     public function getParser()
     {
-        $file_names = [
-            'file1',
-            'file2'
-        ];
         $parser = new \Src\MultiFileParser([
-            'file_names' => $file_names
+            'src_files' => $this->getFiles()
         ]);
         return [[$parser]];
     }
@@ -55,19 +71,23 @@ final class MultiFileParserTest extends TestCase
             'file1',
             'file2'
         ];
+
         $parser = new \Src\MultiFileParser([
-            'file_names' => $file_names,
+            'src_files' => $this->getFiles(),
             'count_same_id_constraint' => 2,
             'max_count_constraint' => 4,
         ]);
+
         $result_file_name = $parser->parse()
             ->write();
 
         $file_parser = new Parser(
             $result_file_name,
-            ',',
-            'ext',
-            'result'
+            [
+                'delimiter' => ',',
+                'ext' => '.csv',
+                'csv_src_dir_name' => 'result'
+            ]
         );
         $this->assertTrue(count($file_parser->parse()) <= 4);
         unlink($this->getResultDirPath() . '/' . $result_file_name);

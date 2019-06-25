@@ -10,15 +10,11 @@ interface ParserInterface
     /**
      * ParserInterface constructor.
      * @param string $filename
-     * @param string $delimiter
-     * @param string $ext
-     * @param string $path_to_csv_dir
+     * @param array $options
      */
     function __construct(
         string $filename,
-        string $delimiter = ',',
-        string $ext = '',
-        string $path_to_csv_dir = 'data'
+        array $options = []
     );
 
     function parse(): array;

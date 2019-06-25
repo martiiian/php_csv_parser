@@ -1,12 +1,20 @@
 <?php
 require "./vendor/autoload.php";
 
-$file_names = [
-    'file1',
-    'file2'
+$files = [
+    [
+        'name' => 'file1',
+        'ext' => '.csv',
+        'delimiter' => ','
+    ],
+    [
+        'name' => 'file2',
+        'ext' => '.csv',
+        'delimiter' => ','
+    ]
 ];
 $parser = new \Src\MultiFileParser([
-    'file_names' => $file_names,
+    'src_files' => $files,
     'max_count_constraint' => 4
 ]);
 $parser->parse()

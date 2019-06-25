@@ -22,25 +22,33 @@ php ./vendor/phpunit/phpunit/phpunit --configuration ./phpunit.xml ./Tests
 ```
 
 ---
-#Пример использования:
+# Пример использования:
 ```php
 // массив с названиями файлов для парсинга в дирректории <root>/data
-$file_names = [
-    'file1',
-    'file2'
+$files = [
+    [
+        'name' => 'file1',
+        'ext' => '.csv',
+        'delimiter' => ','
+    ],
+    [
+        'name' => 'file2',
+        'ext' => '.csv',
+        'delimiter' => ','
+    ]
 ];
 
 // Создание парсера 
 // в конструктор передаем массив данных, типа:
 // 
-//  file_names - массив с названиями
+//  src_files - массив с информацией о исходных CSV файлах
 //  count_same_id_constraint(optional) - Максимальное количество объектов с уникальным id
 //  max_count_constraint - Максимальное количество строк в результирующем файле
 //  sort_column - Индекс колонки, по которой производится сортировка
 //  id_column - Колонка по которой делается ограничение на уникальность
 
 $parser = new \Src\MultiFileParser([
-    'file_names' => $file_names,
+    'src_files' => $files,
     'max_count_constraint' => 4
 ]);
 
