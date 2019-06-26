@@ -1,8 +1,9 @@
 <?php
 
 namespace Src;
+require_once "Parser.php";
 
-class MultiFileParser implements MultiFileParserInterface
+class MultiFileParser
 {
     /**
      * массив с информацией о исходных CSV файлах
@@ -79,9 +80,9 @@ class MultiFileParser implements MultiFileParserInterface
     }
 
     /**
-     * @return $this|MultiFileParserInterface
+     * @return $this
      */
-    public function parse(): MultiFileParserInterface
+    public function parse()
     {
         foreach($this->src_files as $src_file) {
             $parser = new Parser($src_file['name'], [

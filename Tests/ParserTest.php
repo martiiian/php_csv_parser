@@ -12,7 +12,6 @@ final class ParserTest extends TestCase
         $parser = new Parser('file1', [
             'csv_src_dir_name' => $this->csv_dir_name
         ]);
-        $this->assertInstanceOf('\Src\ParserInterface', $parser);
         $result = $parser->parse();
         $this->assertIsArray($result);
         $this->assertCount(4, $result);

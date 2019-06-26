@@ -1,5 +1,5 @@
 <?php
-require "./vendor/autoload.php";
+require "Src/MultiFileParser.php";
 
 $files = [
     [

@@ -2,7 +2,7 @@
 
 namespace Src;
 
-class Parser implements ParserInterface
+class Parser
 {
     private $filename = '';
     private $csv_src_dir_name = 'data';
