@@ -12,6 +12,12 @@ class MultiFileParser
     protected $src_files = [];
 
     /**
+     * Дирректория с которой подгружаются файлы автоматом
+     * @var array|mixed
+     */
+    protected $src_directory = '';
+
+    /**
      * Распарсенные и совмещенные данные
      * @var array
      */
@@ -69,9 +75,29 @@ class MultiFileParser
      */
     public function __construct(array $data)
     {
-        $this->src_files = $data['src_files'];
-        if (count($data['src_files']) === 0) {
-            throw new \Exception('file names is empty!');
+        if (
+            isset($data['src_directory'])
+            && is_string($data['src_directory'])
+            && strlen($data['src_directory']) > 0
+        ) {
+            $this->src_directory = $data['src_directory'];
+            if (! file_exists($data['src_directory'])) {
+                throw new \Exception("src directory doesn't exist");
+            }
+            $entries =  scandir($data['src_directory']);
+            foreach($entries as $entry) {
+                if (mb_strpos($entry, '.csv') !== false) {
+                    array_push($this->src_files, substr($entry, 0, -4));
+                }
+            }
+            if (count($this->src_files) === 0) {
+                throw new \Exception("src directory doesn't contain csv files");
+            }
+        } else {
+            if (count($data['src_files']) === 0) {
+                throw new \Exception('file names is empty!');
+            }
+            $this->src_files = $data['src_files'];
         }
         $this->count_same_id_constraint = $data['count_same_id_constraint'] ?? $this->count_same_id_constraint;
         $this->max_count_constraint = $data['max_count_constraint'] ?? $this->max_count_constraint;
@@ -85,10 +111,15 @@ class MultiFileParser
     public function parse()
     {
         foreach($this->src_files as $src_file) {
-            $parser = new Parser($src_file['name'], [
-                'delimiter' => $src_file['delimiter'],
-                'ext' => $src_file['ext']
-            ]);
+            $parser = $this->src_directory
+                ? new Parser($src_file, [
+                    'csv_src_dir_name' => $this->src_directory
+                ])
+                : new Parser($src_file['name'], [
+                    'delimiter' => $src_file['delimiter'],
+                    'ext' => $src_file['ext'],
+                    'csv_src_dir_name' => $this->src_directory
+                ]);
             $this->parsed_data = array_merge($this->parsed_data, $parser->parse());
         }
         return $this;

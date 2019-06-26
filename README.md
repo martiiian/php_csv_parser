@@ -9,6 +9,7 @@ php phpunit-8.2.phar --configuration ./phpunit.xml ./Tests
 
 ---
 # Пример использования:
+### Парсинг с известным списком файлов
 ```php
 // массив с названиями файлов для парсинга в дирректории <root>/data
 $files = [
@@ -35,6 +36,22 @@ $files = [
 
 $parser = new \Src\MultiFileParser([
     'src_files' => $files,
+    'max_count_constraint' => 4
+]);
+
+// запуск пасинга
+$parser->parse();
+
+// получение распарсенных, отсортированных данных
+$parser->getParsedData();
+
+// запись результата в файл
+$parser->write();
+```
+### Парсинг всех файлов из указанной дирректории
+```php
+$parser = new \Src\MultiFileParser([
+    'src_directory' => $files,
     'max_count_constraint' => 4
 ]);
 

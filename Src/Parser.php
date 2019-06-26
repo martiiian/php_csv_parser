@@ -22,7 +22,7 @@ class Parser
         $this->filename = $filename;
         $this->delimiter = $options['delimiter'] ?? $this->delimiter;
         $this->ext = $options['ext'] ?? $this->ext;
-        $this->csv_src_dir_name = $options['csv_src_dir_name'] ?? $this->csv_src_dir_name;
+        $this->csv_src_dir_name = $options['csv_src_dir_name'] ? $options['csv_src_dir_name'] : $this->csv_src_dir_name;
     }
 
     /**
