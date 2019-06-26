@@ -1,7 +1,9 @@
 <?php
 
+require_once "Src/Parser.php";
+
 use PHPUnit\Framework\TestCase;
-use \Src\Parser;
+use Src\Parser;
 
 final class ParserTest extends TestCase
 {

@@ -1,7 +1,10 @@
 <?php
 
+require_once "Src/MultiFileParser.php";
+require_once "Src/Parser.php";
+
 use PHPUnit\Framework\TestCase;
-use \Src\Parser;
+use Src\Parser;
 
 final class MultiFileParserTest extends TestCase
 {
