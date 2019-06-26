@@ -48,10 +48,10 @@ $parser->getParsedData();
 // запись результата в файл
 $parser->write();
 ```
-### Парсинг всех файлов из указанной дирректории
+### Парсинг всех файлов из указанной дирректории(в корне)
 ```php
 $parser = new \Src\MultiFileParser([
-    'src_directory' => $files,
+    'src_directory' => 'data',
     'max_count_constraint' => 4
 ]);
 
