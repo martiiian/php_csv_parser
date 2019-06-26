@@ -205,15 +205,17 @@ class MultiFileParser
         array &$same_id_constraint_data,
         array $row
     ): bool {
-        $key_exist = array_key_exists($row[$this->id_column], $same_id_constraint_data);
+        $id = $row[$this->id_column];
+        $key_exist = array_key_exists($id, $same_id_constraint_data);
         if (
             $key_exist
-            && $same_id_constraint_data[$this->id_column] >= $this->count_same_id_constraint
+            && $same_id_constraint_data[$id] >= $this->count_same_id_constraint
         ) return false;
+
         if (! $key_exist) {
-            $same_id_constraint_data[$this->id_column] = 0;
+            $same_id_constraint_data[$id] = 0;
         }
-        ++$same_id_constraint_data[$this->id_column];
+        ++$same_id_constraint_data[$id];
         return true;
     }
 
